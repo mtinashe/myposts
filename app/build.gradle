@@ -69,6 +69,13 @@ dependencies {
     implementation libs.room_rx2
     implementation libs.room_runtime
 
+    //logging
+    implementation libs.timber
+
+    //kodein di
+    implementation libs.kodein_generic
+    implementation libs.kodein_androidx
+
     testImplementation libs.junit
     testImplementation libs.mockito
 

@@ -1,4 +1,4 @@
-package com.mtinashe.myposts.api.retrofit
+package com.mtinashe.myposts.data.api.retrofit
 
 import com.google.gson.GsonBuilder
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory

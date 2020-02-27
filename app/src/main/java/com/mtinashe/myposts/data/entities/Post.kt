@@ -1,4 +1,4 @@
-package com.mtinashe.myposts.api.entities
+package com.mtinashe.myposts.data.entities
 
 import com.google.gson.annotations.SerializedName
 
