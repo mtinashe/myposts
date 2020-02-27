@@ -1,0 +1,64 @@
+apply plugin: 'com.android.application'
+
+apply plugin: 'kotlin-android'
+
+apply plugin: 'kotlin-android-extensions'
+
+apply from: "../app/dependencies.gradle"
+
+android {
+    compileSdkVersion 29
+    buildToolsVersion "29.0.2"
+    defaultConfig {
+        applicationId "com.mtinashe.myposts"
+        minSdkVersion 21
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+def libs = ext.library
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    implementation libs.support_design
+    implementation libs.support_compat
+    implementation libs.support_cardview
+    implementation libs.support_emoji
+    implementation libs.support_constraint
+    implementation libs.core
+
+    //navigation dependencies
+    implementation libs.nav_fragment
+    implementation libs.nav_ui
+
+    //retrofit
+    implementation libs.retrofit
+    implementation libs.retrofit_coroutines
+    implementation libs.api_logging
+
+    //architecture dependencies
+    implementation libs.arch_lifecycle
+    implementation libs.arch_common_java_eight
+
+    //room dependencies
+    implementation libs.room_rx2
+    implementation libs.room_runtime
+
+    testImplementation libs.junit
+    testImplementation libs.mockito
+
+    //android test dependencies
+    androidTestImplementation libs.espresso
+    androidTestImplementation libs.test_runner
+}
