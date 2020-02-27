@@ -23,6 +23,15 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    // For Kotlin projects
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 }
 
 def libs = ext.library
@@ -44,11 +53,16 @@ dependencies {
 
     //retrofit
     implementation libs.retrofit
+    implementation libs.retrofit_gson
     implementation libs.retrofit_coroutines
     implementation libs.api_logging
 
+    //coroutines
+    implementation libs.ktx_coroutines
+
     //architecture dependencies
     implementation libs.arch_lifecycle
+    implementation libs.arch_lifecycle_live_data
     implementation libs.arch_common_java_eight
 
     //room dependencies
