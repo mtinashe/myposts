@@ -5,9 +5,12 @@ import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.mtinashe.myposts.R
+import com.mtinashe.myposts.ui.adapters.PostsAdapter
 import com.mtinashe.myposts.ui.viewmodels.PostsViewModel
 import com.mtinashe.myposts.ui.viewmodels.factories.PostsViewModelFactory
+import kotlinx.android.synthetic.main.activity_main.*
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.kodein
 import org.kodein.di.generic.instance
@@ -24,20 +27,12 @@ class MainActivity : AppCompatActivity(), KodeinAware {
 
         postViewModel = ViewModelProviders.of(this,viewModelFactory).get(PostsViewModel::class.java)
 
+        val adapter = PostsAdapter(this)
+        rv_posts.layoutManager = LinearLayoutManager(this)
+        rv_posts.adapter = adapter
+
         postViewModel.allPosts.observe(this, Observer {
-            it.forEach {post ->
-//                Log.d("MainActivity",post.title)
-            }
-        })
-
-        postViewModel.allCommentsByPost.observe(this, Observer {
-            it.forEach {comment ->
-                Log.d("MainActivity",comment.body)
-            }
-        })
-
-        postViewModel.authorById.observe(this, Observer {
-            Log.d("MainActivity",it.name)
+            adapter.setItems(it)
         })
     }
 }

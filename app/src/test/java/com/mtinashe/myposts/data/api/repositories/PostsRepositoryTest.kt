@@ -2,6 +2,7 @@ package com.mtinashe.myposts.data.api.repositories
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.mtinashe.myposts.data.api.retrofit.ApiService
+import com.mtinashe.myposts.data.entities.Comment
 import com.mtinashe.myposts.data.entities.Post
 import com.mtinashe.myposts.mock
 import kotlinx.coroutines.Dispatchers
@@ -22,7 +23,8 @@ import org.mockito.Mockito
 class PostsRepositoryTest {
 
     lateinit var client : ApiService
-    val expectedData = Post("tinashe", 6, "testing", 1)
+    private val expectedData = Post(0,"tinashe", "tinashe", 1)
+    private val expectedComment = Comment(0,"Tinasge", "tmakuti@icloud.com", "2", 6)
 
 
     @ExperimentalCoroutinesApi
@@ -38,21 +40,28 @@ class PostsRepositoryTest {
     @Test
     fun `test if repository is getting posts from client`() = runBlockingTest {
         `stub get all posts`()
-        val actual = client.getAllPosts()
-
-        assertTrue(actual.isNotEmpty())
+        val returnedPosts = client.getAllPosts()
+        assertTrue(returnedPosts.isNotEmpty())
     }
 
+    @ExperimentalCoroutinesApi
     @Test
-    fun getCommentsByPost() {
-
+    fun `test if repository is getting comments from client based on post id`() = runBlockingTest{
+        `stub get all comments for a post`()
+        val returnedComments = client.getAllComments()
+        assertTrue(returnedComments.isNotEmpty())
     }
 
     @Test
     fun getAuthorById() {
+
     }
 
-    suspend fun `stub get all posts`(){
+    private suspend fun `stub get all posts`(){
         Mockito.`when`(client.getAllPosts()).thenReturn(listOf(expectedData))
+    }
+
+    private suspend fun `stub get all comments for a post`(){
+        Mockito.`when`(client.getAllComments()).thenReturn(listOf(expectedComment))
     }
 }

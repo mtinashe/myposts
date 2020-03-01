@@ -13,9 +13,9 @@ interface ApiService {
     suspend fun getAllPosts() : List<Post>
 
     @GET("comments?")
-    suspend fun getAllCommentsByPostId(@Query("postId") postId : Int) : List<Comment>
+    suspend fun getAllComments() : List<Comment>
 
-    @GET("users/{id}")
-    suspend fun getAllUsersById(@Path(value = "id") userId : Int) : Author
+    @GET("users/")
+    suspend fun getAllUsers() : List<Author>
 
 }

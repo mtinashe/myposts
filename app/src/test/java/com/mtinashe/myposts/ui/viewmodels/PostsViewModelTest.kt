@@ -8,7 +8,6 @@ import com.mtinashe.myposts.data.entities.Post
 import com.mtinashe.myposts.mock
 import kotlinx.coroutines.*
 import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.setMain
 import org.junit.*
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
@@ -24,15 +23,13 @@ class PostsViewModelTest {
 
     private lateinit var repository: SuspendingPostRepository
     private lateinit var viewModel: PostsViewModel
-    val expectedComment = Comment("Tinasge", "tmakuti@icloud.com", 2, "tinashe", 6)
 
-    //mocking live data observer
-    val mainThreadSurrogate = newSingleThreadContext("UI thread")
+    private val expectedData = Post(0,0,"tinashe", "tinashe", 1)
+    private val expectedComment = Comment(0,0,"Tinasge", "tmakuti@icloud.com", "2", 6)
 
     @ExperimentalCoroutinesApi
     @Before
     fun setUp() {
-        Dispatchers.setMain(mainThreadSurrogate)
         repository = mock(SuspendingPostRepository::class.java)
         viewModel = PostsViewModel(repository)
     }

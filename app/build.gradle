@@ -6,6 +6,8 @@ apply plugin: 'kotlin-android-extensions'
 
 apply from: "../app/dependencies.gradle"
 
+apply plugin: 'kotlin-kapt'
+
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
@@ -68,6 +70,13 @@ dependencies {
     //room dependencies
     implementation libs.room_rx2
     implementation libs.room_runtime
+//    def room_version = "2.2.3" // check latest version from docs
+
+    implementation "androidx.room:room-runtime:2.2.4"
+    implementation "androidx.room:room-ktx:2.2.4"
+    kapt "androidx.room:room-compiler:2.2.4"
+
+    debugImplementation 'com.amitshekhar.android:debug-db:1.0.6'
 
     //logging
     implementation libs.timber
