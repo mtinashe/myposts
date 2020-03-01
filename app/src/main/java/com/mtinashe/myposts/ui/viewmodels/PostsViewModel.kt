@@ -2,10 +2,11 @@ package com.mtinashe.myposts.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
-import com.mtinashe.myposts.data.api.repositories.PostsRepository
+import com.mtinashe.myposts.data.api.repositories.SuspendingPostRepository
+
 import kotlinx.coroutines.Dispatchers
 
-class PostsViewModel(private val postsRepository: PostsRepository) : ViewModel() {
+class PostsViewModel(private val postsRepository: SuspendingPostRepository) : ViewModel() {
 
     val allPosts = liveData(Dispatchers.IO) {
         val posts = postsRepository.getPosts()
@@ -13,7 +14,7 @@ class PostsViewModel(private val postsRepository: PostsRepository) : ViewModel()
     }
 
     val allCommentsByPost = liveData(Dispatchers.IO) {
-        val comments = postsRepository.getCommentsByPost(4)
+        val comments = postsRepository.getCommentsByPost(6)
         emit(comments)
     }
 

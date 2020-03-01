@@ -21,6 +21,7 @@ ext.version = [//app dependencies
                mockito               : '2.23.4',
                robolectric           : '4.2',
                test_runner           : '1.0.1',
+               arch_test             : '2.1.0',
                espresso              : '3.0.1']
 
 def version = ext.version
@@ -62,6 +63,7 @@ ext.library = [//app dependencies
                //test dependencies
                junit                          : "junit:junit:${version.junit}",
                mockito                        : "org.mockito:mockito-core:${version.mockito}",
+               arch_test                      : "androidx.arch.core:core-testing:${version.arch_test}",
 
                //android test dependencies
                test_runner                    : 'androidx.test.ext:junit:1.1.1',

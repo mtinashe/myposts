@@ -11,7 +11,6 @@ import com.mtinashe.myposts.ui.viewmodels.factories.PostsViewModelFactory
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.kodein
 import org.kodein.di.generic.instance
-import timber.log.Timber
 
 class MainActivity : AppCompatActivity(), KodeinAware {
     override val kodein by kodein()
@@ -27,7 +26,7 @@ class MainActivity : AppCompatActivity(), KodeinAware {
 
         postViewModel.allPosts.observe(this, Observer {
             it.forEach {post ->
-                Log.d("MainActivity",post.title)
+//                Log.d("MainActivity",post.title)
             }
         })
 
