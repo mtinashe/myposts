@@ -15,6 +15,9 @@ interface PostsDao {
     @Query("SELECT posts.id, posts.title, posts.body, authors.name, authors.phone, authors.user_name FROM posts INNER JOIN authors on posts.authorId == authors.id")
     suspend fun getAllPostsWithAuthors() : List<JoinPostData>
 
+    @Query("SELECT posts.id, posts.title, posts.body, authors.name, authors.phone, authors.user_name FROM posts INNER JOIN authors on posts.authorId == authors.id WHERE posts.id = :postId")
+    suspend fun getPostsWithAuthorsByPostId(postId: Int) : JoinPostData
+
     @Query("SELECT * FROM comments WHERE post_id = :postId ")
     fun getAllCommentsByPostId(postId : Int) : List<Comment>
 

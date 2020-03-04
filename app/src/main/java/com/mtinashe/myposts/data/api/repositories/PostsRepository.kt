@@ -55,25 +55,18 @@ open class PostsRepository (private val postsDao : PostsDao) : SuspendingPostRep
         }
     }
 
+    //API WORK
     override suspend fun getPostsFromApi() = client.getAllPosts()
     override suspend fun getCommentsFromApi() = client.getAllComments()
     override suspend fun getAuthorsFromApi() = client.getAllUsers()
 
-    override suspend fun persistAllPosts(updatedPost: List<Post>) {
-        postsDao.insertAllPosts(updatedPost)
-    }
-
-    override suspend fun persistAllComments(updatedComments: List<Comment>) {
-        postsDao.insertAllComments(updatedComments)
-    }
-
-    override suspend fun persistAllAuthors(updatedAuthors: List<Author>) {
-        postsDao.insertAllAuthors(updatedAuthors)
-    }
-
+    //local db work
+    override suspend fun persistAllPosts(updatedPost: List<Post>) = postsDao.insertAllPosts(updatedPost)
+    override suspend fun persistAllComments(updatedComments: List<Comment>) = postsDao.insertAllComments(updatedComments)
+    override suspend fun persistAllAuthors(updatedAuthors: List<Author>)= postsDao.insertAllAuthors(updatedAuthors)
     override suspend fun getCommentsByPostFromDb(postId : Int) = postsDao.getAllCommentsByPostId(postId)
-
     override suspend fun getPostsFromDb() = postsDao.getAllPostsWithAuthors()
+    override suspend fun getPostById(postId: Int) = postsDao.getPostsWithAuthorsByPostId(postId)
 
 }
 
@@ -90,4 +83,5 @@ interface SuspendingPostRepository{
     //get data from local storage
     suspend fun getPostsFromDb() : List<JoinPostData>
     suspend fun getCommentsByPostFromDb(postId: Int) : List<Comment>
+    suspend fun getPostById(postId: Int) : JoinPostData
 }
