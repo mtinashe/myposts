@@ -12,6 +12,7 @@ import com.mtinashe.myposts.data.entities.joins.JoinPostData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 open class PostsRepository (private val postsDao : PostsDao) : SuspendingPostRepository {
     private val client: ApiService = ApiFactory.apiService
@@ -68,6 +69,11 @@ open class PostsRepository (private val postsDao : PostsDao) : SuspendingPostRep
     override suspend fun getPostsFromDb() = postsDao.getAllPostsWithAuthors()
     override suspend fun getPostById(postId: Int) = postsDao.getPostsWithAuthorsByPostId(postId)
 
+    //sync
+    override fun sync(){
+        Timber.d("Syncing")
+    }
+
 }
 
 interface SuspendingPostRepository{
@@ -84,4 +90,7 @@ interface SuspendingPostRepository{
     suspend fun getPostsFromDb() : List<JoinPostData>
     suspend fun getCommentsByPostFromDb(postId: Int) : List<Comment>
     suspend fun getPostById(postId: Int) : JoinPostData
+
+    //sync
+    fun sync()
 }

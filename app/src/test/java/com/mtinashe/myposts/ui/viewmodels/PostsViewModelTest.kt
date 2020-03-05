@@ -25,9 +25,6 @@ class PostsViewModelTest {
     private lateinit var repository: SuspendingPostRepository
     private lateinit var viewModel: PostsViewModel
 
-    private val expectedData = Post(1,"Hello World","Hello World", 1)
-    private val expectedComment = Comment(1,"Hello world", "tmakuti@icloud.com","Tinashe", 1)
-
     @ExperimentalCoroutinesApi
     @Before
     fun setUp() {
@@ -37,8 +34,8 @@ class PostsViewModelTest {
 
     @ExperimentalCoroutinesApi
     @Test
-    fun testAllPostsFromApi(){
-        val postObserver = mock<Observer<List<Post>>>()
+    fun `test all posts from repository`(){
+        val postObserver = mock<Observer<List<JoinPostData>>>()
         viewModel.allPosts.observeForever(postObserver)
         runBlocking {
             verify(repository).getPostsFromDb()
@@ -46,19 +43,24 @@ class PostsViewModelTest {
     }
 
     @Test
-    fun getAllCommentsByPostFromApi() {
+    fun `test get all comments by post from repository`() {
         val commentsObserver = mock<Observer<List<Comment>>>()
+        viewModel.setPostId(1)
         viewModel.comments.observeForever(commentsObserver)
         runBlocking {
-            `when`(repository.get()).thenReturn(listOf(expectedComment))
-            verify(repository).getCommentsByPost()
+            verify(repository).getCommentsByPostFromDb(1)
         }
     }
 
     @Test
-    fun getAuthorById() {
+    fun `test get single post joined with author from repository`(){
+        val singlePostObserver = mock<Observer<JoinPostData>>()
+        viewModel.setPostId(1)
+        viewModel.post.observeForever(singlePostObserver)
+        runBlocking {
+            verify(repository).getPostById(1)
+        }
     }
-
 
     @ExperimentalCoroutinesApi
     @After

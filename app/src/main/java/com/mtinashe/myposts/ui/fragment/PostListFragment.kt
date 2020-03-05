@@ -28,8 +28,9 @@ class PostListFragment : Fragment(R.layout.post_list_fragment), KodeinAware, Pos
         fun newInstance() = PostListFragment()
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         postViewModel = ViewModelProviders.of(this,viewModelFactory).get(PostsViewModel::class.java)
 
         adapter = PostsAdapter(requireContext())
@@ -37,7 +38,7 @@ class PostListFragment : Fragment(R.layout.post_list_fragment), KodeinAware, Pos
         rv_posts.layoutManager = LinearLayoutManager(requireContext())
         rv_posts.adapter = adapter
 
-        postViewModel.allPosts.observe(viewLifecycleOwner, Observer {
+        postViewModel.allPosts.observe(requireActivity(), Observer {
             adapter.setItems(it)
         })
     }

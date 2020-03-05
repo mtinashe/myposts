@@ -28,4 +28,8 @@ class PostsViewModel(private val postsRepository: SuspendingPostRepository) : Vi
     fun setPostId(id : Int){
         postId = id
     }
+
+    fun startSync(){
+        postsRepository.sync()
+    }
 }

@@ -57,6 +57,7 @@ class ArticleFragment : Fragment(R.layout.article_fragment), KodeinAware {
             })
 
             viewModel.comments.observe(viewLifecycleOwner, Observer {comments ->
+                tv_comments.text = getString(R.string.title_comments, comments.size)
                 setRecyclerItems(comments)
             })
         }

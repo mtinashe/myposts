@@ -28,6 +28,12 @@ android {
         }
     }
 
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -99,6 +105,8 @@ dependencies {
     testImplementation libs.junit
     testImplementation libs.mockito
     testImplementation libs.arch_test
+    testImplementation libs.robolectric
+//    testImplementation libs.test_core
 
     //android test dependencies
     androidTestImplementation "org.mockito:mockito-android:2.8.47"
