@@ -1,11 +1,15 @@
 package com.mtinashe.myposts.data.entities
 
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
+@Entity(tableName = "authors")
 data class Author(
-    var email: String = "",
-    var id: Int = 0,
-    var name: String = "",
-    var phone: String = "",
-    var username: String = "",
-    var website: String = ""
+    @ColumnInfo(name = "email") val email: String = "",
+    @PrimaryKey @ColumnInfo(name = "id") val id: Int = 0,
+    @ColumnInfo(name = "name") val name: String = "",
+    @ColumnInfo(name = "phone") val phone: String = "",
+    @ColumnInfo(name = "user_name") val userName: String = "",
+    @ColumnInfo(name = "website") val website: String = ""
 )

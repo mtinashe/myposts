@@ -8,18 +8,24 @@ import kotlinx.coroutines.Dispatchers
 
 class PostsViewModel(private val postsRepository: SuspendingPostRepository) : ViewModel() {
 
+    private var postId : Int = 0
+
     val allPosts = liveData(Dispatchers.IO) {
-        val posts = postsRepository.getPosts()
+        val posts = postsRepository.getPostsFromDb()
         emit(posts)
     }
 
-    val allCommentsByPost = liveData(Dispatchers.IO) {
-        val comments = postsRepository.getCommentsByPost(6)
+    val post = liveData(Dispatchers.IO){
+        val post = postsRepository.getPostById(postId)
+        emit(post)
+    }
+
+    val comments = liveData ( Dispatchers.IO ){
+        val comments = postsRepository.getCommentsByPostFromDb(postId)
         emit(comments)
     }
 
-    val authorById = liveData (Dispatchers.IO) {
-        val author = postsRepository.getAuthorById(4)
-        emit(author)
+    fun setPostId(id : Int){
+        postId = id
     }
 }

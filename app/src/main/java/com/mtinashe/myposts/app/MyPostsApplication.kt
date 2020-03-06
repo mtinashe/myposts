@@ -1,7 +1,9 @@
 package com.mtinashe.myposts.app
 
 import android.app.Application
+
 import com.mtinashe.myposts.data.api.repositories.PostsRepository
+import com.mtinashe.myposts.data.db.AppDatabase
 import com.mtinashe.myposts.ui.viewmodels.factories.PostsViewModelFactory
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
@@ -15,9 +17,13 @@ class MyPostsApplication : Application(), KodeinAware {
     override val kodein = Kodein.lazy {
         import(androidXModule(this@MyPostsApplication))
 
+        bind() from singleton { AppDatabase(instance()) }
+
         bind() from singleton {
-            PostsRepository()
+            PostsRepository(instance())
         }
+
+        bind() from singleton { instance<AppDatabase>().postDao() }
 
         bind() from provider {
             PostsViewModelFactory(instance())

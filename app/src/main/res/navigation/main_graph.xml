@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_graph"
+    app:startDestination="@id/postListFragment">
+
+    <fragment
+        android:id="@+id/postListFragment"
+        android:name="com.mtinashe.myposts.ui.fragment.PostListFragment"
+        android:label="post_list_fragment"
+        tools:layout="@layout/post_list_fragment" >
+        <action
+            android:id="@+id/action_postListFragment_to_articleFragment"
+            app:destination="@id/articleFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/articleFragment"
+        android:name="com.mtinashe.myposts.ui.fragment.ArticleFragment"
+        android:label="article_fragment"
+        tools:layout="@layout/article_fragment" >
+        <argument
+            android:name="id"
+            app:argType="integer" />
+    </fragment>
+</navigation>

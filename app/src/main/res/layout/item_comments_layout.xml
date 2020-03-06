@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin_16"
+        android:background="@color/grey"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tv_comment_name"
+            style="@style/ItemCommentText"
+            android:layout_marginTop="16dp"
+            android:textStyle="bold"
+            tools:text="Tinashe Makuti" />
+
+        <TextView
+            android:id="@+id/tv_comment_body"
+            style="@style/ItemCommentText"
+            android:layout_marginBottom="16dp"
+            android:textStyle="normal"
+            tools:text="And theoretically drivers  can reject  as many rides as they like without punishment. For rides from some California airports," />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
