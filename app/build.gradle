@@ -28,9 +28,18 @@ android {
         }
     }
 
+    configurations {
+        ktlint
+    }
+
     testOptions {
         unitTests {
             includeAndroidResources = true
+        }
+
+        unitTests.all {
+            systemProperty 'robolectric.dependency.repo.url', 'https://local-mirror/repo'
+            systemProperty 'robolectric.dependency.repo.id', 'local'
         }
     }
 
@@ -44,6 +53,24 @@ android {
     }
 }
 
+task ktlint(type: JavaExec, group: "verification") {
+    description = "Check Kotlin code style."
+    classpath = configurations.ktlint
+    main = "com.pinterest.ktlint.Main"
+    args "src/**/*.kt"
+    // to generate report in checkstyle format prepend following args:
+    // "--reporter=plain", "--reporter=checkstyle,output=${buildDir}/ktlint.xml"
+    // see https://github.com/pinterest/ktlint#usage for more
+}
+check.dependsOn ktlint
+
+task ktlintFormat(type: JavaExec, group: "formatting") {
+    description = "Fix Kotlin code style deviations."
+    classpath = configurations.ktlint
+    main = "com.pinterest.ktlint.Main"
+    args "-F", "src/**/*.kt"
+}
+
 def libs = ext.library
 
 dependencies {
@@ -51,7 +78,6 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     implementation "androidx.appcompat:appcompat:1.1.0"
-
 
     implementation libs.support_design
     implementation libs.support_compat
@@ -91,12 +117,15 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
 
+    ktlint "com.pinterest:ktlint:0.36.0"
 
     implementation "io.coil-kt:coil:0.9.5"
 
     kapt "androidx.room:room-compiler:2.2.4"
 
     debugImplementation 'com.amitshekhar.android:debug-db:1.0.6'
+
+    implementation 'com.airbnb.android:lottie:3.4.0'
 
     //kodein di
     implementation libs.kodein_generic
@@ -113,6 +142,15 @@ dependencies {
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.3")
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
     testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.3.3'
-    androidTestImplementation libs.espresso
-    androidTestImplementation libs.test_runner
+//    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+//    testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+//    androidTestImplementation libs.espresso
+//    androidTestImplementation libs.test_runner
+
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+    androidTestImplementation 'androidx.test:core:1.1.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.0'
+    androidTestImplementation "com.android.support:support-annotations:27.1.1"
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test:rules:1.0.2'
 }

@@ -1,4 +1,4 @@
-package com.mtinashe.myposts
+package com.mtinashe.myposts.test_utils
 
 /*
 https://stackoverflow.com/questions/57027850/testing-android-room-with-livedata-coroutines-and-transactions

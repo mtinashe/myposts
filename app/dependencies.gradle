@@ -18,7 +18,7 @@ ext.version = [//app dependencies
 
                //test dependencies
                junit                 : "4.12",
-               mockito               : '2.23.4',
+               mockito               : '3.3.0',
                robolectric           : '4.3',
                test_runner           : '1.0.1',
                test_core             : '1.2.0',

@@ -1,7 +1,6 @@
 package com.mtinashe.myposts.app
 
 import android.app.Application
-
 import com.mtinashe.myposts.data.api.repositories.PostsRepository
 import com.mtinashe.myposts.data.db.AppDatabase
 import com.mtinashe.myposts.ui.viewmodels.factories.PostsViewModelFactory

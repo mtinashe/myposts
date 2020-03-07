@@ -1,35 +1,29 @@
 package com.mtinashe.myposts.ui.viewmodels
 
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
+import com.mtinashe.myposts.coroutines.DefaultDispatcherProvider
+import com.mtinashe.myposts.coroutines.DispatcherProvider
 import com.mtinashe.myposts.data.api.repositories.SuspendingPostRepository
 
-import kotlinx.coroutines.Dispatchers
+class PostsViewModel(
+    private val postsRepository: SuspendingPostRepository,
+    private val dispatchers: DispatcherProvider = DefaultDispatcherProvider()
+) : ViewModel() {
 
-class PostsViewModel(private val postsRepository: SuspendingPostRepository) : ViewModel() {
-
-    private var postId : Int = 0
-
-    val allPosts = liveData(Dispatchers.IO) {
-        val posts = postsRepository.getPostsFromDb()
-        emit(posts)
+    private var postId: MutableLiveData<Int> = MutableLiveData()
+    val allPosts = postsRepository.getPostsFromDb()
+    val post = Transformations.switchMap(postId) {
+        postsRepository.getPostById(it)
     }
 
-    val post = liveData(Dispatchers.IO){
-        val post = postsRepository.getPostById(postId)
-        emit(post)
+    val comments = Transformations.switchMap(postId) {
+        postsRepository.getCommentsByPostFromDb(it)
     }
 
-    val comments = liveData ( Dispatchers.IO ){
-        val comments = postsRepository.getCommentsByPostFromDb(postId)
-        emit(comments)
-    }
-
-    fun setPostId(id : Int){
-        postId = id
-    }
-
-    fun startSync(){
-        postsRepository.sync()
+    fun setPostId(id: Int) {
+        postId.value = id
     }
 }
+

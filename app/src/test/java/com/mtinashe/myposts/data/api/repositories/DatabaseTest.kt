@@ -1,15 +1,14 @@
 package com.mtinashe.myposts.data.api.repositories
 
-import android.os.Build
 import androidx.room.Room
 import androidx.test.platform.app.InstrumentationRegistry
-import com.mtinashe.myposts.IsMainExecutorRule
 import com.mtinashe.myposts.data.db.AppDatabase
 import com.mtinashe.myposts.data.db.dao.PostsDao
 import com.mtinashe.myposts.data.entities.Author
 import com.mtinashe.myposts.data.entities.Post
+import com.mtinashe.myposts.test_utils.IsMainExecutorRule
+import java.io.IOException
 import junit.framework.Assert.assertTrue
-
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.asExecutor
 import kotlinx.coroutines.test.TestCoroutineDispatcher
@@ -21,11 +20,8 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.annotation.Config
-import java.io.IOException
 
 @RunWith(RobolectricTestRunner::class)
-@Config(sdk = [Build.VERSION_CODES.P])
 class DatabaseTest {
 
     @Rule
