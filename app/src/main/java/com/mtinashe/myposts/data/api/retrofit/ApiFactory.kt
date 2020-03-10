@@ -9,13 +9,13 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object ApiFactory {
 
-    //OkhttpClient for building http request url
+    // OkhttpClient for building http request url
     private val apiClient = OkHttpClient()
         .newBuilder()
         .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
         .build()
 
-    private fun retrofit() : Retrofit = Retrofit.Builder()
+    private fun retrofit(): Retrofit = Retrofit.Builder()
         .client(apiClient)
         .baseUrl("https://jsonplaceholder.typicode.com")
         .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))

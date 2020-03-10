@@ -1,7 +1,7 @@
 package com.mtinashe.myposts.app
 
 import android.app.Application
-
+import com.mtinashe.myposts.data.api.ResponseHandler
 import com.mtinashe.myposts.data.api.repositories.PostsRepository
 import com.mtinashe.myposts.data.db.AppDatabase
 import com.mtinashe.myposts.ui.viewmodels.factories.PostsViewModelFactory
@@ -18,9 +18,10 @@ class MyPostsApplication : Application(), KodeinAware {
         import(androidXModule(this@MyPostsApplication))
 
         bind() from singleton { AppDatabase(instance()) }
+        bind() from singleton { ResponseHandler() }
 
         bind() from singleton {
-            PostsRepository(instance())
+            PostsRepository(instance(), instance())
         }
 
         bind() from singleton { instance<AppDatabase>().postDao() }

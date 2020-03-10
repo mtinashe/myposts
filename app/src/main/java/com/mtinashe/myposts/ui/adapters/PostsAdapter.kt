@@ -4,7 +4,6 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -12,7 +11,6 @@ import coil.api.load
 import com.mtinashe.myposts.R
 import com.mtinashe.myposts.data.entities.joins.JoinPostData
 import kotlinx.android.synthetic.main.item_posts_layout.view.*
-
 
 class PostsAdapter(private val context: Context) : RecyclerView.Adapter<PostsAdapter.ViewHolder>() {
 
