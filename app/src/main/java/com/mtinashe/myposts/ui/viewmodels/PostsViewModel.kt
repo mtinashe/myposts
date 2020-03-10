@@ -26,4 +26,3 @@ class PostsViewModel(
         postId.value = id
     }
 }
-

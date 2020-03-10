@@ -1,11 +1,12 @@
 ext.version = [//app dependencies
                support                : '1.0.0',
+               support_compat         : '1.1.0',
                support_constraint     : '1.1.3',
                fabric                 : "2.8.0@aar",
-               room                   : '2.0.0',
+               room                   : '2.2.4',
                retrofit               : '2.7.2',
                retrofit_coroutines    : "0.9.2",
-               architecture_components: "2.0.0",
+               architecture_components: "2.2.0",
                architecture_live_data : "2.2.0-alpha01",
                timber                 : '4.6.0',
                glide                  : '4.7.1',
@@ -15,11 +16,14 @@ ext.version = [//app dependencies
                api_logging            : '3.10.0',
                coroutines             : '1.3.3',
                kodein                 : '6.2.1',
+               ktlint                 : '0.36.0',
+               coil                   : '0.9.5',
+               lottie                 : "3.4.0",
 
                //test dependencies
                junit                 : "4.12",
                mockito               : '3.3.0',
-               robolectric           : '4.3',
+               robolectric           : '4.1',
                test_runner           : '1.0.1',
                test_core             : '1.2.0',
                arch_test             : '2.1.0',
@@ -28,7 +32,7 @@ ext.version = [//app dependencies
 def version = ext.version
 ext.library = [//app dependencies
                support_design                 : "com.google.android.material:material:${version.support}",
-               support_compat                 : "androidx.appcompat:appcompat:${version.support}",
+               support_compat                 : "androidx.appcompat:appcompat:${version.support_compat}",
                support_cardview               : "androidx.cardview:cardview:${version.support}",
                support_emoji                  : "androidx.emoji:emoji-bundled:${version.support}",
                support_constraint             : "androidx.constraintlayout:constraintlayout:${version.support_constraint}",
@@ -45,7 +49,7 @@ ext.library = [//app dependencies
 
                legacy_support                 :"androidx.legacy:legacy-support-v4:${version.support}",
 
-               room_rx2                       : "androidx.room:room-rxjava2:${version.room}",
+               room_ktx                       : "androidx.room:room-ktx:${version.room}",
                room_runtime                   : "androidx.room:room-runtime:${version.room}",
                room_compiler                  : "androidx.room:room-compiler:${version.room}",
 
@@ -60,6 +64,12 @@ ext.library = [//app dependencies
                kodein_androidx                : "org.kodein.di:kodein-di-framework-android-x:${version.kodein}",
 
                timber                         : "com.jakewharton.timber:timber:${version.timber}",
+
+               ktlint                         : "com.pinterest:ktlint:${version.ktlint}",
+
+               coil                           : "io.coil-kt:coil:${version.coil}",
+
+               lottie                          : "com.airbnb.android:lottie:${version.lottie}",
 
                //test dependencies
                junit                          : "junit:junit:${version.junit}",

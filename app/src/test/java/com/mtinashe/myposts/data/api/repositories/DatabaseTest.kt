@@ -7,6 +7,7 @@ import com.mtinashe.myposts.data.db.dao.PostsDao
 import com.mtinashe.myposts.data.entities.Author
 import com.mtinashe.myposts.data.entities.Post
 import com.mtinashe.myposts.test_utils.IsMainExecutorRule
+import com.mtinashe.myposts.test_utils.getValueBlocking
 import java.io.IOException
 import junit.framework.Assert.assertTrue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -65,6 +66,6 @@ class DatabaseTest {
         postsDao.insertAllPosts(listOf(post))
         postsDao.insertAllAuthors(listOf(author))
         val byPostId = postsDao.getPostsWithAuthorsByPostId(1)
-        assertTrue(byPostId.authorName == "Tinashe")
+        assertTrue(byPostId.getValueBlocking()?.authorName == "Tinashe")
     }
 }

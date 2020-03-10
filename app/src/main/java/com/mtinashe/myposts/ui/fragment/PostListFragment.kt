@@ -39,6 +39,7 @@ class PostListFragment : Fragment(R.layout.post_list_fragment), KodeinAware, Pos
         rv_posts.adapter = adapter
 
         postViewModel.allPosts.observe(viewLifecycleOwner, Observer {
+            tv_loading.visibility = View.GONE
             adapter.setItems(it)
         })
     }

@@ -1,8 +1,11 @@
 package com.mtinashe.myposts.data.api.repositories
 
-import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.liveData
+import com.mtinashe.myposts.data.api.Resource
+import com.mtinashe.myposts.data.api.ResponseHandler
+import com.mtinashe.myposts.data.api.Status
 import com.mtinashe.myposts.data.api.retrofit.ApiFactory
 import com.mtinashe.myposts.data.api.retrofit.ApiService
 import com.mtinashe.myposts.data.db.dao.PostsDao
@@ -13,77 +16,112 @@ import com.mtinashe.myposts.data.entities.joins.JoinPostData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
-open class PostsRepository(private val postsDao: PostsDao) : SuspendingPostRepository {
+open class PostsRepository(private val postsDao: PostsDao, private val responseHandler: ResponseHandler) : SuspendingPostRepository {
     private val client: ApiService = ApiFactory.apiService
 
-    private var allPostsFromApi: LiveData<List<Post>>? = null
-    private var allCommentsFromApi: LiveData<List<Comment>>? = null
-    private var allAuthorsFromApi: LiveData<List<Author>>? = null
+    val errorMessage = MutableLiveData<String>()
 
     init {
         this.sync()
     }
 
     // API WORK
-    override suspend fun getPostsFromApi() = client.getAllPosts()
-    override suspend fun getCommentsFromApi() = client.getAllComments()
-    override suspend fun getAuthorsFromApi() = client.getAllUsers()
+    override suspend fun getPostsFromApi(): Resource<List<Post>> {
+       return try {
+            responseHandler.handleSuccess(client.getAllPosts())
+        } catch (exception : Exception){
+            responseHandler.handleException(exception)
+        }
+    }
+
+    override suspend fun getCommentsFromApi() : Resource<List<Comment>> {
+        return try {
+            responseHandler.handleSuccess(client.getAllComments())
+        } catch (exception : Exception){
+            responseHandler.handleException(exception)
+        }
+    }
+
+    override suspend fun getAuthorsFromApi() : Resource<List<Author>>{
+        return try {
+            responseHandler.handleSuccess(client.getAllUsers())
+        } catch (exception : Exception){
+            responseHandler.handleException(exception)
+        }
+    }
 
     // local db work
     override suspend fun persistAllPosts(updatedPost: List<Post>) = postsDao.insertAllPosts(updatedPost)
     override suspend fun persistAllComments(updatedComments: List<Comment>) = postsDao.insertAllComments(updatedComments)
     override suspend fun persistAllAuthors(updatedAuthors: List<Author>) = postsDao.insertAllAuthors(updatedAuthors)
 
-    //avail data to view model
+    // avail data to view model
     override fun getCommentsByPostFromDb(postId: Int) = postsDao.getAllCommentsByPostId(postId)
     override fun getPostsFromDb() = postsDao.getAllPostsWithAuthors()
     override fun getPostById(postId: Int): LiveData<JoinPostData> {
-        Log.d("ArticleFragment", postId.toString())
         return postsDao.getPostsWithAuthorsByPostId(postId)
     }
 
     // sync
     override fun sync() {
-        allPostsFromApi = liveData(Dispatchers.IO) {
-            val posts = this@PostsRepository.getPostsFromApi()
-            emit(posts)
+        val allPosts = liveData(Dispatchers.IO) {
+            emit(Resource.loading(null))
+            emit(this@PostsRepository.getPostsFromApi())
         }
 
-        allCommentsFromApi = liveData(Dispatchers.IO) {
-            val comments = this@PostsRepository.getCommentsFromApi()
-            emit(comments)
+        val allComments = liveData(Dispatchers.IO) {
+            emit(Resource.loading(null))
+            emit(this@PostsRepository.getCommentsFromApi())
         }
 
-        allAuthorsFromApi = liveData(Dispatchers.IO) {
+        val allAuthors = liveData(Dispatchers.IO) {
             val author = this@PostsRepository.getAuthorsFromApi()
-            emit(author)
+            emit(Resource.loading(null))
+            emit(this@PostsRepository.getAuthorsFromApi())
         }
 
-        allPostsFromApi?.observeForever { posts ->
+        allPosts.observeForever { postsInResource ->
             GlobalScope.launch(Dispatchers.IO) {
-                persistAllPosts(posts)
+                when(postsInResource.status){
+                    Status.SUCCESS -> postsInResource.data?.let { persistAllPosts(it) }
+                    Status.ERROR -> setErrorLiveData(postsInResource.message)
+                    Status.LOADING -> Timber.d("Post Loading")
+                }
             }
         }
 
-        allCommentsFromApi?.observeForever { comments ->
+        allComments.observeForever { commentsInResource ->
             GlobalScope.launch(Dispatchers.IO) {
-                persistAllComments(comments)
+                when(commentsInResource.status){
+                    Status.SUCCESS -> commentsInResource.data?.let { persistAllComments(it) }
+                    Status.ERROR -> setErrorLiveData(commentsInResource.message)
+                    Status.LOADING -> Timber.d("Comments Loading")
+                }
             }
         }
 
-        allAuthorsFromApi?.observeForever { authors ->
+        allAuthors.observeForever { authorsInResource ->
             GlobalScope.launch(Dispatchers.IO) {
-                persistAllAuthors(authors)
+                when(authorsInResource.status){
+                    Status.SUCCESS -> authorsInResource.data?.let { persistAllAuthors(it) }
+                    Status.ERROR -> setErrorLiveData(authorsInResource.message)
+                    Status.LOADING -> Timber.d("Author Loading")
+                }
             }
         }
+    }
+
+    private fun setErrorLiveData(errorMessage : String?){
+        Timber.e(errorMessage)
     }
 }
 
 interface SuspendingPostRepository {
-    suspend fun getPostsFromApi(): List<Post>
-    suspend fun getCommentsFromApi(): List<Comment>
-    suspend fun getAuthorsFromApi(): List<Author>
+    suspend fun getPostsFromApi(): Resource<List<Post>>
+    suspend fun getCommentsFromApi(): Resource<List<Comment>>
+    suspend fun getAuthorsFromApi(): Resource<List<Author>>
 
     // persist into local storage
     suspend fun persistAllPosts(updatedPost: List<Post>)

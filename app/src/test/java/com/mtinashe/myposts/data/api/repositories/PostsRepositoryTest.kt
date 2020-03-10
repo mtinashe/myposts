@@ -14,11 +14,13 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mockito
+import retrofit2.HttpException
 
 class PostsRepositoryTest {
 
-    lateinit var client: ApiService
-    lateinit var dao: PostsDao
+    private lateinit var client: ApiService
+    private lateinit var dao: PostsDao
+    private lateinit var httpException: HttpException
     private val expectedPostDataClient = Post(0, "tinashe", "tinashe", 1)
     private val expectedPostDataDao = JoinPostData(0, "tinashe", "tinashe", "Tinashe")
     private val expectedComment = Comment(0, "Tinasge", "tmakuti@icloud.com", "2", 6)
@@ -31,6 +33,7 @@ class PostsRepositoryTest {
     fun setUp() {
         client = mock()
         dao = mock()
+        httpException = mock()
     }
 
     @ExperimentalCoroutinesApi
@@ -49,35 +52,11 @@ class PostsRepositoryTest {
         assertTrue(returnedComments.isNotEmpty())
     }
 
-    @ExperimentalCoroutinesApi
-    @Test
-    fun `test if repository is getting comments from dao based on post id`() = runBlockingTest {
-        `stub get all comments from dao based on post id`()
-        val returnedComments = dao.getAllCommentsByPostId(1)
-        assertTrue(returnedComments.isNotEmpty())
-    }
-
-    @ExperimentalCoroutinesApi
-    @Test
-    fun `test if repository is getting all posts with author names dao`() = runBlockingTest {
-        `stub get all posts with author names from dao`()
-        val returnedPosts = dao.getAllPostsWithAuthors()
-        assertTrue(returnedPosts.isNotEmpty() && returnedPosts[0].authorName == "Tinashe")
-    }
-
     private suspend fun `stub get all posts`() {
         Mockito.`when`(client.getAllPosts()).thenReturn(listOf(expectedPostDataClient))
     }
 
     private suspend fun `stub get all comments for a post`() {
         Mockito.`when`(client.getAllComments()).thenReturn(listOf(expectedComment))
-    }
-
-    private suspend fun `stub get all posts with author names from dao`() {
-        Mockito.`when`(dao.getAllPostsWithAuthors()).thenReturn(listOf(expectedPostDataDao))
-    }
-
-    private suspend fun `stub get all comments from dao based on post id`() {
-        Mockito.`when`(dao.getAllCommentsByPostId(1)).thenReturn(listOf(expectedComment))
     }
 }
