@@ -1,7 +1,7 @@
 package com.mtinashe.myposts.data.api
 
-import retrofit2.HttpException
 import java.net.SocketTimeoutException
+import retrofit2.HttpException
 
 enum class ErrorCodes(val code: Int) {
     SocketTimeOut(-1)

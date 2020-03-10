@@ -1,7 +1,5 @@
 package com.mtinashe.myposts.data.api
 
-import android.os.AsyncTask
-
 /*
  * Copyright (C) 2017 The Android Open Source Project
  *

@@ -29,25 +29,25 @@ open class PostsRepository(private val postsDao: PostsDao, private val responseH
 
     // API WORK
     override suspend fun getPostsFromApi(): Resource<List<Post>> {
-       return try {
+        return try {
             responseHandler.handleSuccess(client.getAllPosts())
-        } catch (exception : Exception){
+        } catch (exception: Exception) {
             responseHandler.handleException(exception)
         }
     }
 
-    override suspend fun getCommentsFromApi() : Resource<List<Comment>> {
+    override suspend fun getCommentsFromApi(): Resource<List<Comment>> {
         return try {
             responseHandler.handleSuccess(client.getAllComments())
-        } catch (exception : Exception){
+        } catch (exception: Exception) {
             responseHandler.handleException(exception)
         }
     }
 
-    override suspend fun getAuthorsFromApi() : Resource<List<Author>>{
+    override suspend fun getAuthorsFromApi(): Resource<List<Author>> {
         return try {
             responseHandler.handleSuccess(client.getAllUsers())
-        } catch (exception : Exception){
+        } catch (exception: Exception) {
             responseHandler.handleException(exception)
         }
     }
@@ -77,14 +77,13 @@ open class PostsRepository(private val postsDao: PostsDao, private val responseH
         }
 
         val allAuthors = liveData(Dispatchers.IO) {
-            val author = this@PostsRepository.getAuthorsFromApi()
             emit(Resource.loading(null))
             emit(this@PostsRepository.getAuthorsFromApi())
         }
 
         allPosts.observeForever { postsInResource ->
             GlobalScope.launch(Dispatchers.IO) {
-                when(postsInResource.status){
+                when (postsInResource.status) {
                     Status.SUCCESS -> postsInResource.data?.let { persistAllPosts(it) }
                     Status.ERROR -> setErrorLiveData(postsInResource.message)
                     Status.LOADING -> Timber.d("Post Loading")
@@ -94,7 +93,7 @@ open class PostsRepository(private val postsDao: PostsDao, private val responseH
 
         allComments.observeForever { commentsInResource ->
             GlobalScope.launch(Dispatchers.IO) {
-                when(commentsInResource.status){
+                when (commentsInResource.status) {
                     Status.SUCCESS -> commentsInResource.data?.let { persistAllComments(it) }
                     Status.ERROR -> setErrorLiveData(commentsInResource.message)
                     Status.LOADING -> Timber.d("Comments Loading")
@@ -104,7 +103,7 @@ open class PostsRepository(private val postsDao: PostsDao, private val responseH
 
         allAuthors.observeForever { authorsInResource ->
             GlobalScope.launch(Dispatchers.IO) {
-                when(authorsInResource.status){
+                when (authorsInResource.status) {
                     Status.SUCCESS -> authorsInResource.data?.let { persistAllAuthors(it) }
                     Status.ERROR -> setErrorLiveData(authorsInResource.message)
                     Status.LOADING -> Timber.d("Author Loading")
@@ -113,7 +112,7 @@ open class PostsRepository(private val postsDao: PostsDao, private val responseH
         }
     }
 
-    private fun setErrorLiveData(errorMessage : String?){
+    private fun setErrorLiveData(errorMessage: String?) {
         Timber.e(errorMessage)
     }
 }
